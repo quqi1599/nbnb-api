@@ -1,6 +1,6 @@
 import React from 'react';
 import type { QuotaInfo } from '../data/api';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X } from 'lucide-react';
 
 interface ResultCardProps {
     data: QuotaInfo;
@@ -22,7 +22,32 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
     const isExhausted = data.remaining <= 0;
 
     return (
-        <div className="ios-card animate-enter" style={{ textAlign: 'center' }}>
+        <div className="ios-card animate-enter" style={{ textAlign: 'center', position: 'relative' }}>
+            {/* Close Button */}
+            <button
+                onClick={onReset}
+                style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    background: 'rgba(255,255,255,0.1)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    color: 'var(--ios-label-secondary)',
+                    transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            >
+                <X size={18} />
+            </button>
+
             <div style={{ marginBottom: '20px' }}>
                 {!isExhausted ? (
                     <CheckCircle2 size={56} color="var(--ios-green)" style={{ margin: '0 auto' }} />
@@ -52,12 +77,12 @@ export const ResultCard: React.FC<ResultCardProps> = ({ data, onReset }) => {
                 {/* Row 2: Used / Limit */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
                     <div style={{ padding: '16px', borderRight: '0.5px solid var(--ios-separator)' }}>
-                        <div className="text-secondary" style={{ fontSize: '13px', marginBottom: '4px' }}>已用</div>
-                        <div style={{ fontSize: '17px', fontWeight: 600 }}>${data.used.toFixed(2)}</div>
+                        <div style={{ fontSize: '13px', marginBottom: '6px', color: 'var(--ios-orange)', fontWeight: 500 }}>已用</div>
+                        <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--ios-label-primary)' }}>${data.used.toFixed(2)}</div>
                     </div>
                     <div style={{ padding: '16px' }}>
-                        <div className="text-secondary" style={{ fontSize: '13px', marginBottom: '4px' }}>总额度</div>
-                        <div style={{ fontSize: '17px', fontWeight: 600 }}>${data.total.toFixed(2)}</div>
+                        <div style={{ fontSize: '13px', marginBottom: '6px', color: 'var(--ios-green)', fontWeight: 500 }}>总额度</div>
+                        <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--ios-label-primary)' }}>${data.total.toFixed(2)}</div>
                     </div>
                 </div>
             </div>

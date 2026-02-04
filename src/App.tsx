@@ -1,14 +1,74 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './index.css';
 import { QueryForm } from './components/QueryForm';
 import { ResultCard } from './components/ResultCard';
 import { checkQuota, type QuotaInfo } from './data/api';
 import { ShieldCheck, SearchX } from 'lucide-react';
+import { Clock4, Trash2 } from 'lucide-react';
 
 function App() {
   const [result, setResult] = useState<QuotaInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [history, setHistory] = useState<Array<{
+    apiKey: string;
+    label: string;
+    timestamp: number;
+  }>>([]);
+
+  // Helpers
+  const STORAGE_KEY = 'dq_quota_history';
+  const maskKey = (key: string) => {
+    if (!key) return '';
+    if (key.length <= 8) return key;
+    return `${key.slice(0, 4)}…${key.slice(-4)}`;
+  };
+
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        setHistory(JSON.parse(cached));
+      }
+    } catch {
+      // ignore read errors (e.g., privacy mode)
+    }
+  }, []);
+
+  const saveHistory = (apiKey: string) => {
+    const entry = {
+      apiKey,
+      label: maskKey(apiKey),
+      timestamp: Date.now(),
+    };
+    setHistory((prev) => {
+      const deduped = [entry, ...prev.filter((h) => h.apiKey !== apiKey)].slice(0, 8);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(deduped));
+      } catch {
+        /* ignore quota issues */
+      }
+      return deduped;
+    });
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const formatTime = (ts: number) =>
+    new Date(ts).toLocaleString('zh-CN', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
 
   const handleSearch = async (apiKey: string) => {
     setLoading(true);
@@ -17,6 +77,7 @@ function App() {
     try {
       const data = await checkQuota(apiKey);
       setResult(data);
+      saveHistory(apiKey);
     } catch (err: any) {
       if (err.message === 'Invalid API Key') {
         setError('无效的 API Key，请检查后重试。');
@@ -96,15 +157,43 @@ function App() {
               </div>
             )}
 
-            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            {history.length > 0 && (
+              <div className="history-card">
+                <div className="history-head">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Clock4 size={16} />
+                    <span>最近查询</span>
+                  </div>
+                  <button className="ghost-btn" onClick={clearHistory}>
+                    <Trash2 size={16} />
+                    清空
+                  </button>
+                </div>
+                <div className="history-list">
+                  {history.map((h) => (
+                    <button
+                      key={h.apiKey}
+                      className="history-pill"
+                      onClick={() => handleSearch(h.apiKey)}
+                      disabled={loading}
+                    >
+                      <span className="mono">{h.label}</span>
+                      <span className="text-tertiary" style={{ fontSize: '12px' }}>{formatTime(h.timestamp)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div style={{ marginTop: '20px' }}>
               <a
                 href="https://item.taobao.com/item.htm?id=1000400880237&mi_id=0000uZ-n6MQ5LrfUY3gGGrUWV8I-QQbS0kVdcbRmgYygRRQ&spm=a21xtw.29178619.0.0&xxc=shop"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-btn"
-                style={{ display: 'inline-block' }}
+                className="promo-card"
               >
-                逛逛我们的淘宝商品 →
+                <div className="promo-title">淘宝热卖 · 限时优惠</div>
+                <div className="promo-subtitle">点我查看商品详情 →</div>
               </a>
             </div>
           </div>
