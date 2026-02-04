@@ -1,0 +1,187 @@
+/* Apple Human Interface Guidelines Style */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Apple System Colors (Dark Mode Base) */
+  --ios-bg-base: #000000;
+  --ios-bg-secondary: #1c1c1e;
+  /* Gray 6 */
+  --ios-bg-tertiary: #2c2c2e;
+  /* Gray 5 */
+
+  --ios-label-primary: #ffffff;
+  --ios-label-secondary: #ebebf599;
+  /* 60% white */
+  --ios-label-tertiary: #ebebf54d;
+  /* 30% white */
+
+  --ios-separator: #38383a;
+
+  --ios-blue: #0a84ff;
+  /* System Blue Dark */
+  --ios-gray: #8e8e93;
+  --ios-red: #ff453a;
+  --ios-green: #30d158;
+  --ios-orange: #ff9f0a;
+
+  /* Glass Materials */
+  --material-regular: rgba(30, 30, 30, 0.7);
+  --material-thick: rgba(44, 44, 46, 0.8);
+
+  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  background-color: var(--ios-bg-base);
+  color: var(--ios-label-primary);
+  font-family: var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 20px;
+  padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+    calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Apple Card Style */
+.ios-card {
+  background: var(--ios-bg-secondary);
+  border-radius: 20px;
+  /* iOS default rounded rect */
+  padding: 24px;
+  /* Subtle border/shadow isn't typical iOS flat list style, 
+     but for a floating card, a very subtle separation is good */
+  /* box-shadow: 0 4px 24px rgba(0,0,0,0.2); */
+}
+
+/* Typography */
+h1 {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+h2 {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Inputs */
+.ios-input-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.ios-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background-color: var(--ios-bg-tertiary);
+  border: none;
+  color: var(--ios-label-primary);
+  font-size: 17px;
+  /* iOS Human Interface body size */
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.2s;
+}
+
+.ios-input:focus {
+  background-color: #3a3a3c;
+  /* Slightly lighter on focus */
+}
+
+.ios-input::placeholder {
+  color: var(--ios-label-secondary);
+}
+
+/* Buttons */
+.ios-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  /* iOS 15+ Button style */
+  border: none;
+  background-color: var(--ios-blue);
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ios-btn:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.ios-btn:disabled {
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-label-tertiary);
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-enter {
+  animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.text-secondary {
+  color: var(--ios-label-secondary);
+}
+
+.text-tertiary {
+  color: var(--ios-label-tertiary);
+}
+
+/* Reset buttons */
+button.link-btn {
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: var(--ios-blue);
+  cursor: pointer;
+  padding: 8px;
+}
