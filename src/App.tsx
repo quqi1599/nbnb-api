@@ -95,6 +95,18 @@ function App() {
                 {error}
               </div>
             )}
+
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <a
+                href="https://item.taobao.com/item.htm?id=1000400880237&mi_id=0000uZ-n6MQ5LrfUY3gGGrUWV8I-QQbS0kVdcbRmgYygRRQ&spm=a21xtw.29178619.0.0&xxc=shop"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-btn"
+                style={{ display: 'inline-block' }}
+              >
+                逛逛我们的淘宝商品 →
+              </a>
+            </div>
           </div>
 
           <div style={{ marginTop: '40px', textAlign: 'center', opacity: 0.5, fontSize: '13px', color: 'var(--ios-label-tertiary)' }}>
