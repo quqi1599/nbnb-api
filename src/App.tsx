@@ -78,8 +78,8 @@ function App() {
       const data = await checkQuota(apiKey);
       setResult(data);
       saveHistory(apiKey);
-    } catch (err: any) {
-      if (err.message === 'Invalid API Key') {
+    } catch (err: unknown) {
+      if (err instanceof Error && err.message === 'Invalid API Key') {
         setError('无效的 API Key，请检查后重试。');
       } else {
         setError('获取额度失败，请确保 Key 正确。');
